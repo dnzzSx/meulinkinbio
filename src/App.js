@@ -1,9 +1,35 @@
+import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const [backgroundPosition, setBackgroundPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+
+      const x = (clientX / innerWidth - 0.5) * 30;
+      const y = (clientY / innerHeight - 0.5) * 30;
+
+      setBackgroundPosition({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   return (
     <div className="App">
-      <div className="background" />
+      <div
+        className="background"
+        style={{
+          transform: `translate(${backgroundPosition.x}px, ${backgroundPosition.y}px)`,
+        }}
+      />
       <header className="App-header">
         <img src="profile.jpg" className="profile-img" alt="profile" />
         <h1>Lacerda.tattoo</h1>
